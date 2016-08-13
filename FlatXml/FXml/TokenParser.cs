@@ -129,7 +129,7 @@ namespace FlatXml.FXml
 			Token token = new Token { Value = name, Type = tokenType };
 			ParserResult result = ParserResult.INITIAL;
 			if (chr.Equals(STOP))
-				result.State = LexicalState.STOP;
+				result = ParserResult.STOP;
 			result.Token = token;
 			return result;
 		}
