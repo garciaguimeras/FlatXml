@@ -37,6 +37,8 @@
     <Compile Include="FXml\LLParser.cs" />
     <Compile Include="FXml\Preprocessor.cs" />
     <Compile Include="FXml\TokenParser.cs" />
+    <Compile Include="Deserializer.cs" />
+    <Compile Include="Serializer.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
