@@ -75,7 +75,7 @@ to define meta attributes.
 
 #### Sixth recipe: Comment your code
 ```
-\# This is a comment
+# This is a comment
 ```
 
 #### Last steps
