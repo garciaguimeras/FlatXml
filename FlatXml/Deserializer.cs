@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Reflection;
 
 using FlatXml.FXml;
+using System.CodeDom;
 
 namespace FlatXml
 {
@@ -19,11 +20,11 @@ namespace FlatXml
 			errors = null;
 		}
 
-		public IEnumerable<FXmlElement> Deserialize(Stream stream)
+		public FXmlDocument Deserialize(Stream stream)
 		{
 			errors = null;
 
-			List<string> lines =  new List<string>();
+			List<string> lines = new List<string>();
 			using (StreamReader reader = new StreamReader(stream))
 			{
 				while (!reader.EndOfStream)
@@ -51,8 +52,16 @@ namespace FlatXml
 				return null;
 			}
 
-			return llParser.FXmlElements;
+			FXmlDocument document = new FXmlDocument();
+			document.Nodes.AddRange(llParser.FXmlNodes);
+			return document;
 		}
 
+		public object Deserialize(Stream stream, Type type)
+		{
+			FXmlDocument document = Deserialize(stream);
+			// TODO: convert from document to type instance
+			return null;
+		}
 	}
 }

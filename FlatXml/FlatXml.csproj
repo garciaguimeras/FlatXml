@@ -33,12 +33,14 @@
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="FXml\Error.cs" />
-    <Compile Include="FXml\FXmlElement.cs" />
     <Compile Include="FXml\LLParser.cs" />
     <Compile Include="FXml\Preprocessor.cs" />
     <Compile Include="FXml\TokenParser.cs" />
     <Compile Include="Deserializer.cs" />
     <Compile Include="Serializer.cs" />
+    <Compile Include="FXml\FXmlElement.cs" />
+    <Compile Include="FXmlAttributes.cs" />
+    <Compile Include="FXmlIntrospection.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -11,7 +11,7 @@ namespace FlatXml.FXml
 		int pos;
 		List<Error> errors;
 
-		public IEnumerable<FXmlElement> FXmlElements { get; private set; }
+		public IEnumerable<FXmlNode> FXmlNodes { get; private set; }
 		public IEnumerable<Error> Errors { get { return errors.AsEnumerable(); } }
 
 		private void SyntaxError(string expected, Token token)
@@ -28,7 +28,7 @@ namespace FlatXml.FXml
 			return tokens.ElementAt(p);
 		}
 
-		private void ParseContext(FXmlElement element)
+		private void ParseContext(FXmlNode element)
 		{
 			Token t = GetTokenAtPos(pos);
 			if (t == null || t.Type != TokenType.OPEN_BRACES_SIGN)
@@ -40,9 +40,9 @@ namespace FlatXml.FXml
 			pos = pos + 1;
 
 			// Get children
-			IEnumerable<FXmlElement> children = ParseStatements();
-			foreach (FXmlElement e in children)
-				element.Children.Add(e);
+			IEnumerable<FXmlNode> children = ParseStatements();
+			foreach (FXmlNode e in children)
+				element.Nodes.Add(e);
 
 			t = GetTokenAtPos(pos);
 			if (t == null || t.Type != TokenType.CLOSE_BRACES_SIGN)
@@ -54,7 +54,7 @@ namespace FlatXml.FXml
 			pos = pos + 1;
 		}
 
-		private void ParseAttributes(FXmlElement element)
+		private void ParseAttributes(FXmlNode element)
 		{
 			Token t1 = GetTokenAtPos(pos);
 			Token t2 = GetTokenAtPos(pos + 1);
@@ -89,7 +89,7 @@ namespace FlatXml.FXml
 				ParseAttributes(element);
 		}
 
-		private FXmlElement ParseTask()
+		private FXmlNode ParseTask()
 		{
 			Token t = GetTokenAtPos(pos);
 			if (t == null || t.Type != TokenType.ID)
@@ -99,7 +99,7 @@ namespace FlatXml.FXml
 			}
 
 			// Create element
-			FXmlElement element = new FXmlElement { Name = t.Value };
+			FXmlNode element = new FXmlNode { Name = t.Value };
 
 			pos = pos + 1;
 			Token next = GetTokenAtPos(pos);
@@ -113,14 +113,14 @@ namespace FlatXml.FXml
 			return element;
 		}
 
-		private IEnumerable<FXmlElement> ParseStatements()
+		private IEnumerable<FXmlNode> ParseStatements()
 		{
-			List<FXmlElement> elements = new List<FXmlElement>();
+			List<FXmlNode> elements = new List<FXmlNode>();
 
 			Token t = GetTokenAtPos(pos);
 			while (t != null && t.Type == TokenType.ID)
 			{
-				FXmlElement e = ParseTask();
+				FXmlNode e = ParseTask();
 				t = GetTokenAtPos(pos);
 
 				elements.Add(e);
@@ -129,9 +129,9 @@ namespace FlatXml.FXml
 			return elements;
 		}
 
-		private IEnumerable<FXmlElement> ParseCode()
+		private IEnumerable<FXmlNode> ParseCode()
 		{
-			IEnumerable<FXmlElement> elements = ParseStatements();
+			IEnumerable<FXmlNode> elements = ParseStatements();
 
 			Token t = GetTokenAtPos(pos);
 			if (t != null)
@@ -146,7 +146,7 @@ namespace FlatXml.FXml
 			this.pos = 0;
 			this.errors = new List<Error>();
 
-			FXmlElements = ParseCode();
+			FXmlNodes = ParseCode();
 
 			if (this.errors.Count > 0)
 				return false;

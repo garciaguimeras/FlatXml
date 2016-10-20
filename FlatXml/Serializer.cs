@@ -14,7 +14,7 @@ namespace FlatXml
 		public Serializer()
 		{}
 
-		private void SerializeElement(FXmlElement element, StreamWriter writer, int level)
+		private void SerializeElement(FXmlNode element, StreamWriter writer, int level)
 		{
 			string indent = "";
 			for (int i = 0; i < level; i++)
@@ -31,11 +31,11 @@ namespace FlatXml
 
 			writer.WriteLine();
 
-			if (element.Children != null && element.Children.Count > 0)
+			if (element.Nodes != null && element.Nodes.Count > 0)
 			{
 				writer.Write(indent);
 				writer.WriteLine("{");
-				foreach (FXmlElement child in element.Children)
+				foreach (FXmlNode child in element.Nodes)
 				{
 					SerializeElement(child, writer, level + 1);
 				}
@@ -44,17 +44,23 @@ namespace FlatXml
 			}
 		}
 
-		public Stream Serialize(IEnumerable<FXmlElement> elements)
+		public Stream Serialize(IEnumerable<FXmlNode> elements)
 		{
 			MemoryStream stream = new MemoryStream();
 			StreamWriter writer = new StreamWriter(stream);
-			foreach (FXmlElement element in elements)
+			foreach (FXmlNode element in elements)
 			{
 				SerializeElement(element, writer, 0);
 			}
 			writer.Flush();
 			stream.Position = 0;
 			return stream;
+		}
+
+		public Stream Serialize(Object baseNode)
+		{
+			// TODO: Convert baseNode to element list and use previous method
+			return null;
 		}
 
 	}

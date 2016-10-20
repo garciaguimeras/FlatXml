@@ -102,4 +102,14 @@ if (elements == null)
 
 #### How to serialize?
 
-
+```
+IEnumerable<FXmlElement> elements;
+...
+string outFilename = "output.fxml";
+Serializer s = new Serializer();
+Stream stream = s.Serialize(elements);
+using (FileStream file = File.OpenWrite(outFilename))
+{
+	stream.CopyTo(file);
+}
+```
